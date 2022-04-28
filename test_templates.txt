@@ -1,0 +1,42 @@
+
+Testing template 1
+
+
+func TestNameFunction(t *testing.T) {
+	functionTestName := "Error Test"
+	ctx := Context{
+		Connection: &types.Connection{ID: "False-test-ID", Token: types.Document{"access_token": accessToken}},
+		Message:    &types.ETLMessage{Datasource: "XXX", Cycle: "XXX"},
+	}
+
+	tests := []struct {
+		ctx      *Context
+		structItem1           string   //data type
+		structItem2           string
+		structItem3           string
+		structItem4           string
+		structItem5           string
+	}{
+		{
+			ctx:      &Context{},
+			structItem1:     "Test Item1",
+			structItem2:     "Test Item2",
+			structItem3:     "Test Item3",
+			structItem4:     "Test Item4",
+			structItem5:     "Test Item6",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			withMeta := ctx.transformMetadata(tt.structItem1, tt.structItem2, tt.structItem3, tt.structItem4)
+
+			assert.Equal(t, tt.structItem1, withMeta.ObjectCategory, "Object-category")
+			assert.Equal(t, tt.structItem2, withMeta.ObjectClass, "Object-class")
+			assert.Equal(t, tt.structItem3, withMeta.ObjectType, "Object-type")
+			assert.Equal(t, tt.structItem4, withMeta.Currency, "Currency")
+			assert.Equal(t, ctx.Connection.ID, withMeta.Connection, "Connection")
+			assert.Equal(t, "", withMeta.Period, "Period")
+		})
+	}
+}
